@@ -1,7 +1,9 @@
  Rapport
  
 1.1  Diagramme de class
-![Blank diagram - Page 2 (1)](https://user-images.githubusercontent.com/101754865/204949541-34af049f-96f2-4b28-a1b6-6adc98eacbf4.png)
+
+
+![Blank diagram - Page 2 (2)](https://user-images.githubusercontent.com/101754865/204952096-837476f8-ebb9-4cd6-b696-f7edaa3ebeab.png)
 
 1-2 La base de donnees 
 
