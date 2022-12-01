@@ -29,12 +29,12 @@ public class DBProduit {
 	   }
 	 
 	 
-	 public static void delete(int id) {
+	 public static void delete(Long id) {
 		 EntityManager em = DBUtil.getEmFactory().createEntityManager();
 	      EntityTransaction transaction = em.getTransaction();
 
 	      String queryString = "SELECT p FROM Produit p "
-	                         + "WHERE p.id = :id";
+	                         + "WHERE p.Id = :id";
 	      TypedQuery<Produit> query = em.createQuery(queryString, Produit.class);
 	      query.setParameter("id", id);
 	      
@@ -80,16 +80,17 @@ public class DBProduit {
 	         products = query.getResultList();
 	      } catch (Exception e) {
 	         System.err.println(e);
+	         System.out.println("hii");
 	      } finally {
 	         em.close();
 	      }
 	      
 	      return products;
 	   }
-	 public static Produit selectProduct(String productCode) {
+	 public static Produit selectProduct(int productCode) {
 	      EntityManager em = DBUtil.getEmFactory().createEntityManager();
-	      String queryString = "SELECT p FROM produit p "
-	                         + "WHERE p.id = :code";
+	      String queryString = "SELECT p FROM Produit p "
+	                         + "WHERE p.Id = :code";
 	      TypedQuery<Produit> query = em.createQuery(queryString, Produit.class);
 	      query.setParameter("code", productCode);
 	      

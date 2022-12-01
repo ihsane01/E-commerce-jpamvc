@@ -12,9 +12,9 @@ import javax.persistence.Table;
 @Table(name="produit")
 public class Produit  {
 	
-	   @Id
+		@Id
 	   @GeneratedValue(strategy = GenerationType.IDENTITY)
-	   private int id; 
+	   private Long Id;
 	   private String Nompro;
 	   private String description;
 	   private int qtestock;
@@ -24,9 +24,10 @@ public class Produit  {
 	   
 	
 
-	public Produit(int productId, String nompro, String description, int qtestock, float price, String codeimg) {
+
+	public Produit(Long id, String nompro, String description, int qtestock, float price, String codeimg) {
 		super();
-		this.id = productId;
+		Id = id;
 		Nompro = nompro;
 		this.description = description;
 		this.qtestock = qtestock;
@@ -34,12 +35,12 @@ public class Produit  {
 		this.codeimg = codeimg;
 	}
 
-	public int getProductId() {
-		return id;
+	public Long getId() {
+		return Id;
 	}
 
-	public void setProductId(int productId) {
-		this.id = productId;
+	public void setId(Long id) {
+		Id = id;
 	}
 
 	public String getNompro() {

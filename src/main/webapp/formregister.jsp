@@ -19,7 +19,7 @@
 <div class="container">
         <div class=" text-center mt-5 ">
 
-            <h1 >Register Form</h1>
+            <h1 >Register </h1>
                 
             
         </div>

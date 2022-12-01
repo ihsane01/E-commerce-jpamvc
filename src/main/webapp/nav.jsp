@@ -10,7 +10,7 @@
 <title>Insert title here</title>
 </head>
 <body>
- <nav class="navbar navbar-expand-lg navbar navbar-light" style="background-color: #e3f2fd">
+ <nav class="navbar navbar-expand-lg  navbar-dark bg-dark" style="background-color: #e3f2fd">
  <div class="container">
   <a class="navbar-brand" href="#">Market</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,29 +19,37 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
+    
       <li class="nav-item active">
-        <a class="nav-link" href="">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" href="<c:url value='/Pro' />">Products</a>
         
       </li>
          <c:choose>
       
-       <c:when test="${username == null}">
-       <li class="nav-item">
+       <c:when test="${iduser == null}">
+       <li class="nav-item active">
         <a class="nav-link" href="<c:url value='/formlogin.jsp' />">login</a>
         
       </li>
-           <li class="nav-item">
+           <li class="nav-item active">
         <a class="nav-link disabled" href="<c:url value='/formregister.jsp' />">register</a>
       </li>
      </c:when>
            <c:otherwise>
-             </li>
-           <li class="nav-item">
+            <c:choose>
+             <c:when test="${iduser ==6}">
+             <li class="nav-item active">
+        <a class="nav-link disabled" href="<c:url value='/user/users' />">Client</a>
+      </li></c:when>
+        <c:otherwise>
+          <li class="nav-item active">
+        <a class="nav-link disabled" href="<c:url value='/panier' />">Panier</a>
+      </li>
+        </c:otherwise></c:choose>
+           <li class="nav-item active">
         <a class="nav-link disabled" href="<c:url value='/user/logout' />">Logout</a>
       </li>
+   
      </c:otherwise>
      </c:choose>
  

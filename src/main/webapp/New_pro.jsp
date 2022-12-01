@@ -13,10 +13,12 @@
 	crossorigin="anonymous">
 </head>
 <body>
+<jsp:include page="nav.jsp" />
+
 <div class="container">
         <div class=" text-center mt-5 ">
 
-            <h1 >New Product Form</h1>
+            <h1 >New Product </h1>
                 
             
         </div>
@@ -79,7 +81,7 @@
 
                     <div class="col-md-12">
                         
-                        <input type="submit" class="btn btn-success btn-send  pt-2 btn-block
+                        <input type="submit" class="btn btn-dark btn-send  pt-2 btn-block
                             " value="Send " >
                     
                 </div>

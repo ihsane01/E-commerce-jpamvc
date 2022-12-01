@@ -20,7 +20,7 @@ import ma.fstt.persistance.model.User;
 /**
  * Servlet implementation class PanierServlet
  */
-@WebServlet(name = "panier", urlPatterns = {"/panier/*"})
+@WebServlet(name = "paniers", urlPatterns = {"/panier","/panier/*"})
 public class PanierServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -39,9 +39,12 @@ public class PanierServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		String requestURI = request.getRequestURI();
 	      String url = "/index.jsp";
+	      ///ecommerce-jpamvc/Panier/*
+	      if (requestURI.endsWith("/panier")) {
+	      url = displayPanier(request, response);
+	    	//  url="/panier.jsp";
+		         System.out.println(url);
 
-	      if (requestURI.matches("/ecommerce-jpamvc/Panier/*")) {
-	         url = displayPanier(request, response);
 	      } 
 
 	      getServletContext().getRequestDispatcher(url).forward(request, response);	}
@@ -72,17 +75,14 @@ public class PanierServlet extends HttpServlet {
 
 private String displayPanier(HttpServletRequest request,
         HttpServletResponse response) {
-	String requestURI = request.getRequestURI();
-    String[] tokens = requestURI.split("/");
-    String productCode = tokens[tokens.length - 1];
-
-    Produit product = DBProduit.selectProduct(productCode);
     HttpSession session = request.getSession();
-    session.setAttribute("product", product);
-   List<Produit> products = DBProduit.selectProducts();
-   session.setAttribute("products", products);
+    long id= (long) session.getAttribute("iduser");
+    
+    User user = DBUser.selectuserid(id);
+   List<Panier> paniers =DBPanier.selectPaniers(user);
+   session.setAttribute("paniers", paniers);
 
-   return "/Products.jsp";
+   return "/panier.jsp";
 }
 
 
@@ -90,22 +90,36 @@ private String addpanier(HttpServletRequest request, HttpServletResponse respons
 	     HttpSession session = request.getSession();
 	     String requestURI = request.getRequestURI();
 	     String[] tokens = requestURI.split("/");
-	     String productCode = tokens[tokens.length - 1];
+	     String productCode = tokens[tokens.length - 2];
+	     int idpro=Integer.parseInt(productCode);
+		   int qtep=Integer.parseInt(request.getParameter("qtestock"));
+System.out.println(idpro);
+System.out.println("dddd");
 
-	     Produit product = DBProduit.selectProduct(productCode);
-	    String username= (String) session.getAttribute("username");
-	    User user =DBUser.selectuser(username);
-	    
-	    //Panier panier=new Panier( product.getNompro(),product.getCodeimg(), int qtep, float prixtotal,  user);
-	  // DBPanier.insert(panier);
-	   return "/Pro";
+	     Produit product = DBProduit.selectProduct(idpro);
+	    Long id= (long) session.getAttribute("iduser");
+	    System.out.println(id);
+
+	    User user =DBUser.selectuserid(id);
+	    System.out.println(user.getId());
+
+	    float prixtotal=qtep*product.getPrice();
+	   Panier panier=new Panier( product.getNompro(),product.getCodeimg(), qtep,  prixtotal,user.getId());
+	   panier.setUser(user);
+	  DBPanier.insert(panier);
+	   return "/panier.jsp";
 }
 
 private String removepanier(HttpServletRequest request, HttpServletResponse response) {
-	    
-	   int id = Integer.parseInt(request.getParameter("id"));
+    HttpSession session = request.getSession();
+    String requestURI = request.getRequestURI();
 
-	   DBProduit.delete(id);
-	   return "/Products.jsp";
-}}
+	String[] tokens = requestURI.split("/");
+     String panierid = tokens[tokens.length - 1];
+	 //   Panier panier =DBPanier.selectPanier(Integer.parseInt(panierid));
+
+	   DBPanier.delete(Integer.parseInt(panierid));
+	   return "/Panier.jsp";
+}
+}
 

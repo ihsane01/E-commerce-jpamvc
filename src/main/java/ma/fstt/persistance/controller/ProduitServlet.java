@@ -42,8 +42,11 @@ public class ProduitServlet extends HttpServlet {
 	         url = displayProducts(request, response);
 	      } else if (requestURI.matches("/ecommerce-jpamvc/Pro/produits/formpro")) {
 		         url ="/New_pro.jsp";
+		      }else if (requestURI.endsWith("/removepro")) {
+		    	  System.out.println("eeeeee");
+			         url = removeproduct(request, response);
 		      }
-
+		     
 	      getServletContext().getRequestDispatcher(url).forward(request, response);	}
 
 	/**
@@ -58,12 +61,13 @@ public class ProduitServlet extends HttpServlet {
 	         url = addproduct(request, response);
 	         System.out.println(url);
 	         response.sendRedirect(request.getContextPath() + "/Pro");
-	      } else if (requestURI.endsWith("/removepro")) {
-	         url = removeproduct(request, response);
-	      } else if (requestURI.endsWith("/updateItem")) {
+	      }  else if (requestURI.endsWith("/updateItem")) {
 	         url = updateproduct(request, response);
-	      }  else if (requestURI.endsWith("/displayUser")) {
-	         url = "/cart/new_customer.jsp";
+	      }else if (requestURI.endsWith("/admin")) {
+	    	   url = displayProducts(request, response);
+		         System.out.println(url);
+
+			      getServletContext().getRequestDispatcher(url).forward(request, response);	
 	      } else if (requestURI.endsWith("/displayPayment")) {
 	         url = "/cart/payment.jsp";
 		    getServletContext().getRequestDispatcher(url).forward(request, response);	
@@ -84,7 +88,13 @@ public class ProduitServlet extends HttpServlet {
 	      List<Produit> products = DBProduit.selectProducts();
 	      HttpSession session = request.getSession();
 	      session.setAttribute("products", products);
+	      if((Long)session.getAttribute("iduser")!= null) {
+	if(	   (long) session.getAttribute("iduser")==6) {
+    return "/Tableproduit.jsp";
 
+}}
+	      
+	      
 	      return "/Products.jsp";
 	   }
 	   
@@ -105,19 +115,22 @@ public class ProduitServlet extends HttpServlet {
 	   }
 	   
 	   private String removeproduct(HttpServletRequest request, HttpServletResponse response) {
-		    
-		   int id = Integer.parseInt(request.getParameter("id"));
+		   String requestURI = request.getRequestURI();
+		     String[] tokens = requestURI.split("/");
+		     String productCode = tokens[tokens.length - 2];
+		     Long idpro=Long.valueOf(productCode);
+		//   int id = Integer.parseInt(request.getParameter("id"));
 
-		   DBProduit.delete(id);
-		   return "/Products.jsp";
+		   DBProduit.delete(idpro);
+		   return "/Pro";
 	   }
 	   private String updateproduct(HttpServletRequest request, HttpServletResponse response) {
 		      int id = Integer.parseInt(request.getParameter("id"));
 
-		   DBProduit.delete(id);
+		  // DBProduit.delete(id);
 		   return "/Products.jsp";
 	   }
-	   private String showProduct(HttpServletRequest request,
+	 /*  private String showProduct(HttpServletRequest request,
 	           HttpServletResponse response) {
 
 	      // Retrieve the product code
@@ -131,7 +144,7 @@ public class ProduitServlet extends HttpServlet {
 	      session.setAttribute("product", product);
 
 	      return "/single_product.jsp";
-	   }
+	   }*/
 
 
 }

@@ -2,6 +2,7 @@ package ma.fstt.persistance.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import ma.fstt.persistance.manager.DBProduit;
 import ma.fstt.persistance.manager.DBUser;
+import ma.fstt.persistance.model.Produit;
 import ma.fstt.persistance.model.User;
 
 
@@ -47,7 +50,12 @@ public class UserServlet extends HttpServlet {
 		         System.out.println(url);
 
 			      getServletContext().getRequestDispatcher(url).forward(request, response);	
-	      }}
+	      }else if (requestURI.endsWith("/users")) {
+		         url = displayClient(request, response);
+			      getServletContext().getRequestDispatcher(url).forward(request, response);	
+
+		      }
+	      }
 
 
 	
@@ -80,6 +88,22 @@ public class UserServlet extends HttpServlet {
 
 	      }
 	
+	
+	   private String displayClient(HttpServletRequest request,
+	           HttpServletResponse response) {
+
+	      List<User> users = DBUser.selectUsers();
+	      HttpSession session = request.getSession();
+	      session.setAttribute("clients", users);
+	if(	   (long) session.getAttribute("iduser")==6) {
+    return "/Tableclient.jsp";
+
+}
+	      
+	      
+	      return "/Products.jsp";
+	   }
+	
 	   private String register(HttpServletRequest request, HttpServletResponse response) {
 		      // retrieve or create a cart
 		   String username=request.getParameter("name");
@@ -89,8 +113,7 @@ public class UserServlet extends HttpServlet {
 			HttpSession session=request.getSession();
 		      User  user= new User (username,  email,  password);
 			   DBUser.insert(user);
-				session.setAttribute("username", username);
-				session.setAttribute("iduser", user.getId());
+				//session.setAttribute("iduser", user.getId());
 
 			   
 			
@@ -101,10 +124,24 @@ public class UserServlet extends HttpServlet {
 		   String username=request.getParameter("name");
 
 		   String email=request.getParameter("email");
+			  System.out.println(email);
+
 			String password=request.getParameter("password");
+			  System.out.println(password);
+
 			HttpSession session=request.getSession();
 			  if( DBUser.selectuser(email,password)) {
-					session.setAttribute("username", username);
+				  User user=DBUser.selectuser1(email,password);
+				  if(user.getEmail()=="ihsane@gmail.com")
+				  {
+						session.setAttribute("iduser", user.getId());
+						 return "/Pro/admin";
+
+				  }
+				  
+					//session.setAttribute("username", username);
+					session.setAttribute("iduser", user.getId());
+				  System.out.println(user.getId());
 					 return "/Pro";
 			  };
 
@@ -116,7 +153,8 @@ public class UserServlet extends HttpServlet {
 	   private String logout (HttpServletRequest request, HttpServletResponse response) throws IOException {
 		      // retrieve or create a cart
 		   HttpSession session=request.getSession();
-			session.removeAttribute("username");
+			session.removeAttribute("iduser");
+
 			PrintWriter out=response.getWriter();
 			out.println("<span style='color:red'>You logged out successfully</span>");
 		   
